@@ -38,7 +38,7 @@ fn update(_app: &App, _model: &mut Model, _update: Update) {}
 
 fn view(app: &App, _model: &Model, frame: Frame) {
     let draw = app.draw();
-    draw.background().color(WHITE);
+    draw.background().color(BLACK);
     for agent in &_model.agents {
         draw.tri()
             .xy(vec2(agent.pos.x as f32, agent.pos.y as f32))

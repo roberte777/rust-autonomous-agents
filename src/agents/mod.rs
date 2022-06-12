@@ -13,3 +13,5 @@ pub mod evader;
 pub use self::evader::Evader;
 pub mod prey;
 pub use self::prey::Prey;
+pub mod state;
+pub use self::state::PhysicsState;

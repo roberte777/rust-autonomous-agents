@@ -1,14 +1,12 @@
 use nannou::{color::rgb, prelude::*};
 
-use crate::physics::{Position, Vector};
-
 use super::{
     brain::{alignment, cohesion, separation},
-    AgentState,
+    PhysicsState,
 };
 #[derive(Clone)]
 pub struct Prey {
-    pub state: AgentState,
+    pub state: PhysicsState,
     pub world_size: (u32, u32),
     pub color: rgb::Srgb<u8>,
     pub width: f32,
@@ -17,13 +15,14 @@ pub struct Prey {
     pub perception: f32,
 }
 impl Prey {
-    pub fn new(initial_position: Position, world_size: (u32, u32)) -> Prey {
-        let state = AgentState {
+    pub fn new(initial_position: Vec2, world_size: (u32, u32)) -> Prey {
+        let state = PhysicsState {
             pos: initial_position,
             rotation: 0.0,
-            velocity: Vector { x: 5.0, y: 5.0 },
-            acceleration: Vector { x: 0.0, y: 0.0 },
+            velocity: vec2(5.0, 5.0),
+            acceleration: vec2(0.0, 0.0),
             max_speed: 4.0,
+            min_speed: 1.0,
             max_force: 0.5,
         };
         return Prey {
@@ -36,7 +35,7 @@ impl Prey {
             perception: 100.0,
         };
     }
-    pub fn move_agent(&mut self, v: Vector) {
+    pub fn move_agent(&mut self, v: Vec2) {
         // let alignment_vec = alignment(&self.state, &self.local_prey);
         // let cohesion_vec = cohesion(&self.state, &self.local_prey);
         // let separation_vec = separation(&self.state, &self.local_prey);
@@ -51,19 +50,5 @@ impl Prey {
             .w_h(self.width, self.height)
             .rotate(self.state.rotation)
             .color(self.color);
-    }
-    pub fn local_boids<'a>(&self, all_boids: &'a Vec<Prey>, boid_index: usize) -> Vec<&'a Prey> {
-        let mut local_boids = Vec::new();
-
-        for i in 0..all_boids.len() {
-            if i != boid_index {
-                let distance = self.state.pos.distance(&all_boids[i].state.pos);
-                if distance <= self.perception {
-                    local_boids.push(&all_boids[i]);
-                }
-            }
-        }
-
-        local_boids
     }
 }

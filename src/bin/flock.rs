@@ -1,17 +1,17 @@
 use autonomous_agents::{
     agents::{
-        brain::{alignment, calculate_pursue_target, cohesion, separation},
+        brain::{alignment, cohesion, separation},
         Prey,
     },
     simulation::generate_random_pos,
 };
 use nannou::prelude::*;
 
+const SIZE: (u32, u32) = (1300, 750);
+const PREY_COUNT: u32 = 50;
+
 fn main() {
-    const SIZE: (u32, u32) = (1300, 750);
-    nannou::app(|app| model(app, Some(SIZE)))
-        .update(update)
-        .run();
+    nannou::app(model).update(update).run();
 }
 
 struct Model {
@@ -19,24 +19,23 @@ struct Model {
     size: (u32, u32),
     boids: Vec<Prey>,
 }
-fn model(app: &App, size: Option<(u32, u32)>) -> Model {
-    let size: (u32, u32) = size.unwrap_or((500, 500));
+fn model(app: &App) -> Model {
     let _window = app
         .new_window()
-        .size(size.0, size.1)
+        .size(SIZE.0, SIZE.1)
         .view(view)
         .build()
         .unwrap();
     let mut boids = vec![];
-    for _ in 0..10 {
-        let pos = generate_random_pos(size);
-        let agent = Prey::new(pos, size);
+    for _ in 0..PREY_COUNT {
+        let pos = generate_random_pos(SIZE);
+        let agent = Prey::new(vec2(pos.x, pos.y), SIZE);
         boids.push(agent)
     }
 
     Model {
         _window,
-        size,
+        size: SIZE,
         boids,
     }
 }
@@ -50,11 +49,9 @@ fn update(_app: &App, model: &mut Model, _update: Update) {
             if i == j {
                 continue;
             };
-            let distance = model.boids[i]
-                .state
-                .pos
-                .distance(&possible_neighbor.state.pos);
-            println!("{}", distance);
+            let state = vec2(model.boids[i].state.pos.x, model.boids[i].state.pos.y);
+            let other = vec2(possible_neighbor.state.pos.x, possible_neighbor.state.pos.y);
+            let distance = state.distance(other);
             if distance <= model.boids[i].perception {
                 println!("perception: {}", model.boids[i].perception);
                 neighbors.push(possible_neighbor);
@@ -66,8 +63,6 @@ fn update(_app: &App, model: &mut Model, _update: Update) {
         let v2 = cohesion(&model.boids[i].state, &neighbors);
         let v3 = separation(&model.boids[i].state, &neighbors);
         let v4 = v1 + v2 + v3;
-        let v5 = v2 + v3;
-        println!("{:?}", v2);
         model.boids[i].move_agent(v4);
     }
 }

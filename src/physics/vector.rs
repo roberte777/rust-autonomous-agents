@@ -1,6 +1,6 @@
-use std::ops::{Add, Mul, Sub};
+use std::ops::{Add, Div, Mul, Sub};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Vector {
     pub x: f32,
     pub y: f32,
@@ -49,6 +49,15 @@ impl Mul<f32> for Vector {
     fn mul(self, rhs: f32) -> Self {
         let x = self.x * rhs;
         let y = self.y * rhs;
+        return Self { x, y };
+    }
+}
+impl Div<f32> for Vector {
+    type Output = Self;
+
+    fn div(self, rhs: f32) -> Self {
+        let x = self.x / rhs;
+        let y = self.y / rhs;
         return Self { x, y };
     }
 }

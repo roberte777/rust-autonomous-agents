@@ -1,2 +1,15 @@
-pub use self::agent::Agent;
+pub use self::agent::AgentState;
 pub mod agent;
+pub mod basic_boid;
+pub mod brain;
+pub mod seeker;
+pub use self::basic_boid::BasicBoid;
+pub use self::seeker::Seeker;
+pub mod fleer;
+pub use self::fleer::Fleer;
+pub mod pursuer;
+pub use self::pursuer::Pursuer;
+pub mod evader;
+pub use self::evader::Evader;
+pub mod prey;
+pub use self::prey::Prey;

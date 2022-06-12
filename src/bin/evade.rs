@@ -1,5 +1,5 @@
 use autonomous_agents::{
-    agents::{brain::calculate_pursue_target, BasicBoid, Pursuer},
+    agents::{brain::calculate_pursue_target, BasicBoid, Evader},
     simulation::generate_random_pos,
 };
 use nannou::prelude::*;
@@ -15,7 +15,7 @@ struct Model {
     _window: window::Id,
     size: (u32, u32),
     agent: BasicBoid,
-    pursuer: Pursuer,
+    pursuer: Evader,
 }
 fn model(app: &App, size: Option<(u32, u32)>) -> Model {
     let size: (u32, u32) = size.unwrap_or((500, 500));
@@ -29,7 +29,7 @@ fn model(app: &App, size: Option<(u32, u32)>) -> Model {
     let pos = generate_random_pos(size);
     let agent = BasicBoid::new(pos, size);
     let pos = generate_random_pos(size);
-    let pursuer = Pursuer::new(pos, size);
+    let pursuer = Evader::new(pos, size);
 
     Model {
         _window,

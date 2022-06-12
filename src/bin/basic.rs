@@ -1,5 +1,4 @@
-use autonomous_agents::agents::Seeker;
-use autonomous_agents::physics::Position;
+use autonomous_agents::agents::BasicBoid;
 use autonomous_agents::simulation::generate_random_pos;
 use nannou::prelude::*;
 
@@ -12,8 +11,7 @@ fn main() {
 
 struct Model {
     _window: window::Id,
-    size: (u32, u32),
-    agents: Vec<Seeker>,
+    agents: Vec<BasicBoid>,
 }
 fn model(app: &App, size: Option<(u32, u32)>) -> Model {
     let size: (u32, u32) = size.unwrap_or((500, 500));
@@ -24,35 +22,24 @@ fn model(app: &App, size: Option<(u32, u32)>) -> Model {
         .build()
         .unwrap();
 
-    let mut agents: Vec<Seeker> = vec![];
+    let mut agents: Vec<BasicBoid> = vec![];
     for _ in 0..3 {
         let pos = generate_random_pos(size);
-        agents.push(Seeker::new(pos));
+        agents.push(BasicBoid::new(pos, size));
     }
 
-    Model {
-        _window,
-        size,
-        agents,
-    }
+    Model { _window, agents }
 }
 
 fn update(_app: &App, _model: &mut Model, _update: Update) {
     for agent in &mut _model.agents {
-        agent.move_agent(&Position {
-            x: _app.mouse.x,
-            y: _app.mouse.y,
-        });
+        agent.move_agent();
     }
 }
 
 fn view(app: &App, _model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(BLACK);
-    //draw the current mouse pos as circle on screen
-    draw.ellipse()
-        .xy(vec2(app.mouse.x, app.mouse.y))
-        .radius(10.0);
     for agent in &_model.agents {
         agent.draw(&draw);
     }

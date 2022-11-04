@@ -24,4 +24,4 @@ All other experiments can be executed by replacing flock for the respective file
 
 ## Example
 
-![Testing](./media_examples/flocking.png)
+![Image example of flocing in execution](./media_examples/flocking.png)

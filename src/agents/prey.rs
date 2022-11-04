@@ -1,9 +1,6 @@
 use nannou::{color::rgb, prelude::*};
 
-use super::{
-    brain::{alignment, cohesion, separation},
-    PhysicsState,
-};
+use super::PhysicsState;
 #[derive(Clone)]
 pub struct Prey {
     pub state: PhysicsState,
@@ -36,10 +33,6 @@ impl Prey {
         };
     }
     pub fn move_agent(&mut self, v: Vec2) {
-        // let alignment_vec = alignment(&self.state, &self.local_prey);
-        // let cohesion_vec = cohesion(&self.state, &self.local_prey);
-        // let separation_vec = separation(&self.state, &self.local_prey);
-        // let vector = alignment_vec + cohesion_vec + separation_vec;
         self.state.apply_force(v);
         self.state.apply_physics();
         self.state.edges(self.world_size);

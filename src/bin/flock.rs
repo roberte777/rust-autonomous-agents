@@ -8,7 +8,7 @@ use autonomous_agents::{
 use nannou::prelude::*;
 
 const SIZE: (u32, u32) = (1300, 750);
-const PREY_COUNT: u32 = 50;
+const PREY_COUNT: u32 = 100;
 
 fn main() {
     nannou::app(model).update(update).run();
@@ -41,29 +41,28 @@ fn model(app: &App) -> Model {
 }
 
 fn update(_app: &App, model: &mut Model, _update: Update) {
-    let len = model.boids.len();
-    for i in 0..len {
-        let mut neighbors = vec![];
-        for j in 0..len {
-            let possible_neighbor = &model.boids[j];
-            if i == j {
-                continue;
-            };
-            let state = vec2(model.boids[i].state.pos.x, model.boids[i].state.pos.y);
-            let other = vec2(possible_neighbor.state.pos.x, possible_neighbor.state.pos.y);
-            let distance = state.distance(other);
-            if distance <= model.boids[i].perception {
-                println!("perception: {}", model.boids[i].perception);
-                neighbors.push(possible_neighbor);
-            }
+    let slice = &mut model.boids[..];
+    for i in 0..slice.len() {
+        if i == slice.len() - 1 {
+            break;
         }
-        // let boid = &mut model.boids[i];
-        // boid.local_prey = neighbors;
-        let v1 = alignment(&model.boids[i].state, &neighbors);
-        let v2 = cohesion(&model.boids[i].state, &neighbors);
-        let v3 = separation(&model.boids[i].state, &neighbors);
+        let (mid, tail) = slice.split_at_mut(i + 1);
+        let (head, element) = mid.split_at_mut(i);
+        let neighbors = head
+            .iter()
+            .chain(tail.iter())
+            .filter(|other| {
+                let state = vec2(element[0].state.pos.x, element[0].state.pos.y);
+                let other = vec2(other.state.pos.x, other.state.pos.y);
+                let distance = state.distance(other);
+                distance <= element[0].perception
+            })
+            .collect::<Vec<&Prey>>();
+        let v1 = alignment(&element[0].state, &neighbors);
+        let v2 = cohesion(&element[0].state, &neighbors);
+        let v3 = separation(&element[0].state, &neighbors);
         let v4 = v1 + v2 + v3;
-        model.boids[i].move_agent(v4);
+        element[0].move_agent(v4);
     }
 }
 

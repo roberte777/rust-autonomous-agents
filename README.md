@@ -24,4 +24,4 @@ All other experiments can be executed by replacing flock for the respective file
 
 ## Example
 
-(./media_examples/flocking.png)
+[Testing](./media_examples/flocking.png)

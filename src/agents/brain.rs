@@ -87,5 +87,5 @@ pub fn separation(agent_state: &PhysicsState, other_boids: &Vec<&Prey>) -> Vec2 
             .div(agent_state.pos.distance(i.state.pos) * 2.0);
         average_seperation -= difference_vec;
     }
-    average_seperation * 1.5
+    average_seperation * 2.0
 }

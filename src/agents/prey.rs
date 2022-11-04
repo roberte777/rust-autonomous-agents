@@ -29,7 +29,7 @@ impl Prey {
             width: 20.0,
             height: 10.0,
             local_prey: vec![],
-            perception: 100.0,
+            perception: 50.0,
         };
     }
     pub fn move_agent(&mut self, v: Vec2) {

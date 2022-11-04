@@ -21,3 +21,7 @@ cargo run --bin flock
 ```
 
 All other experiments can be executed by replacing flock for the respective file name in the bin folder.
+
+## Example
+
+(./media_examples/flocking.png)

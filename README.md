@@ -1,7 +1,5 @@
 # Rust Boid Simulation
 
-_This is my first Rust project, so if your eyes burn looking at the code, my apologies_
-
 This project aims to simulate a flocking mechanism in Rust. I used nannou for visual representation and vectors.
 
 The three components that make up the flocking mechanism are:
